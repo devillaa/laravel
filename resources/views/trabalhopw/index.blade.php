@@ -32,6 +32,10 @@
         <p>Departamento: {{ $funcionario->departamento }}</p>
         <p>Salário: {{ $funcionario->salario }}</p>
         <a href="{{ route('empresa.editar', $funcionario->id) }}">Editar</a>
-        <a href="{{ route('empresa.excluir', $funcionario->id) }}">Excluir</a>
+        <form action="{{ route('empresa.excluir',$funcionario->id) }}" method="POST">
+            @csrf
+            @method('DELETE')
+            <input type="submit" value="Excluir">
+        </form>
     </div>
 @endforeach

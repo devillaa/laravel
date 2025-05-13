@@ -19,13 +19,19 @@ class KeepinhoController extends Controller
         /*
             Cria um nota com todos os valores enviados pelo formulário. Porém, a Model vai ficar apenas com aqueles listados no $fillable.
         */
-        Nota::create($request->all());
+        $dados = $request->validate([
+            'titulo' => 'required',
+            'texto'=> 'required',
+        ]);
+
+        Nota::create($dados);
         return redirect()->route('keep');
     }
 
     public function editar(Nota $nota, Request $request){
         if ($request->isMethod('put')){
             $nota = Nota::find($request->id);
+            $nota->titulo = $request->titulo;
             $nota->texto = $request->texto;
             $nota->save();
 
@@ -35,6 +41,11 @@ class KeepinhoController extends Controller
         return view('keepinho.editar', [
             'nota' => $nota,
         ]);
+    }
+
+    public function apagar(Nota $nota){
+        $nota->delete();
+        return redirect()->route('keep');
     }
 
 }

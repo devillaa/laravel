@@ -50,5 +50,5 @@ Route::prefix('/empresa') ->group(function(){
 
     Route::post('/gravar', [FuncionariosController::class,'gravar'])->name('empresa.gravar');
 
-    Route::get('/excluir/{funcionario}', [FuncionariosController::class,'excluir'])->name('empresa.excluir');
+    Route::delete('/excluir/{funcionario}', [FuncionariosController::class,'excluir'])->name('empresa.excluir');
 });
