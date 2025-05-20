@@ -4,6 +4,12 @@
 @if ($errors->any())
 <div style="color: red;">
     <h3>Erro!</h3>
+    <ul>
+        @foreach ($errors->all() as $err )
+            <li> {{ $err }}</li>
+        @endforeach
+    </ul>
+
 </div>
 @endif
 
@@ -11,10 +17,10 @@
 <form action="{{ route('keep.gravar') }}" method="post">
     @csrf
     <label for="titulo">Título: </label>
-    <input type="text" id="titulo" name="titulo" placeholder="Título: "> <br>
+    <input type="text" id="titulo" name="titulo" placeholder="Título: " value="{{ old('titulo') }}"> <br>
 
     <label for="texto">Nota: </label>
-    <input name="texto" id="texto" placeholder="Nota: ">
+    <input name="texto" id="texto" placeholder="Nota: " value="{{ old('texto') }}">
     <br> <br>
     <input type="submit" value="Gravar Nota">
 </form>
