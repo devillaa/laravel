@@ -1,32 +1,29 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AutenticaController;
-use App\Http\Controllers\CalculosController;
 use App\Http\Controllers\FuncionariosController;
 use App\Http\Controllers\KeepinhoController;
-use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/teste', function () {
-    return view('teste');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/teste/{valor}', function ($valor) {
-    return "Você digitou: {$valor}";
-});
-
-//Calculos
-Route::get('/calc/somar/{x}/{y}', [CalculosController::class, 'somar']);
-
-Route::get('/calc/subtrair/{x}/{y}', [CalculosController::class, 'subtrair']);
-
-Route::get('/calc/quadrado/{x}', [CalculosController::class, 'quadrado']);
+require __DIR__.'/auth.php';
 
 // Keepinho 
-Route::prefix('/keep') ->group(function(){
+Route::prefix('/keep')->group(function(){
     Route::get('/',[KeepinhoController::class, 'index'])->name('keep');
 
     Route::post('/gravar', [KeepinhoController::class,'gravar'])->name('keep.gravar');
@@ -41,12 +38,8 @@ Route::prefix('/keep') ->group(function(){
     Route::get('/lixeira', [KeepinhoController::class,'lixeira'])->name('keep.lixeira');
 
     Route::get('/restaurar/{nota}', [KeepinhoController::class,'restaurar'])->name('keep.restaurar');
-});
 
-Route::get('/autentica', [AutenticaController::class, 'index'])->name('autentica');
-Route::post('/autentica/gravar', [AutenticaController::class, 'gravar'])->name('autentica.gravar');
-Route::get('/autentica/login', [AutenticaController::class, 'login'])->name('autentica.login');
-Route::post('/autentica/login', [AutenticaController::class, 'login']);
+});
 
 // Trabalho pw
 
