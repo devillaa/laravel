@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\ProdutosController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Produto;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AutenticaController;
 use App\Http\Controllers\FuncionariosController;
@@ -19,8 +21,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
-require __DIR__.'/auth.php';
 
 // Keepinho 
 Route::prefix('/keep')->group(function(){
@@ -55,3 +55,9 @@ Route::prefix('/empresa') ->group(function(){
 
     Route::delete('/excluir/{funcionario}', [FuncionariosController::class,'excluir'])->name('empresa.excluir');
 });
+
+
+Route::resource('produtos', ProdutosController::class);
+
+
+require __DIR__.'/auth.php';
