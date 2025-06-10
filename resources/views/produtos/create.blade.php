@@ -16,12 +16,27 @@
                         <!-- Nome -->
                         <div>
                             <x-input-label for="nome" :value="__('Name')" />
-                            <x-text-input id="nome" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
+                            <x-text-input id="nome" class="block mt-1" type="text" name="nome" :value="old('nome')" required autofocus autocomplete="nome" />
                             <x-input-error :messages="$errors->get('name')" class="mt-2" />
                         </div>
 
+                        <!-- Preço -->
+                        <div>
+                            <x-input-label for="preco" :value="__('Preço')" />
+                            <x-text-input id="preco" class="block mt-1" type="number" name="preco" :value="old('preco')" required autofocus autocomplete="preco" />
+                            <x-input-error :messages="$errors->get('preco')" class="mt-2" />
+                        </div>
 
+                        <!-- Descrição -->
+                        <div>
+                            <x-input-label for="descricao" :value="__('Descrição')" />
+                            <x-textarea id="descricao" class="block mt-1" name="descricao" required autofocus autocomplete="descricao" >{{ old('descricao') }}</x-textarea>
+                            <x-input-error :messages="$errors->get('descricao')" class="mt-2" />
+                        </div>
 
+                        <x-primary-button>
+                            Gravar Produto
+                        </x-primary-button>
                     </form>
 
                 </div>
