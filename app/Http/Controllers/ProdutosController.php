@@ -12,7 +12,8 @@ class ProdutosController extends Controller
      */
     public function index()
     {
-        return view('produtos.index');
+        $produtos = Produto::all();
+        return view('produtos.index', compact('produtos'));
     }
 
     /**
@@ -28,7 +29,20 @@ class ProdutosController extends Controller
      */
     public function store(Request $request)
     {
-        Produto::create($request->all());
+        $dados = $request->validate([
+            'nome' => 'required',
+            'preco' => 'required',
+            'descricao' => 'required',
+            'imagem' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if($request->hasFile('imagem')){
+            $imagem = $request->file('imagem');
+            $caminhoImagem = $imagem->store('produtos', 'public');
+            $dados['imagem'] = $caminhoImagem;
+        }
+
+        Produto::create($dados);
         return redirect()->route('produtos.index');
     }
 
@@ -43,17 +57,33 @@ class ProdutosController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Produto $produto)
     {
-        //
+        return view('produtos.edit', compact('produto'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Produto $produto)
     {
-        //
+        $dados = $request->validate([
+            'nome' => 'required|string',
+            'preco' => 'required|numeric',
+            'descricao' => 'required|string',
+            'imagem' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+    
+        if ($request->hasFile('imagem')) {
+            if ($produto->imagem && \Storage::disk('public')->exists($produto->imagem)) {
+                \Storage::disk('public')->delete($produto->imagem);
+            }
+            $dados['imagem'] = $request->file('imagem')->store('produtos', 'public');
+        }
+    
+        $produto->update($dados);
+    
+        return redirect()->route('produtos.index');
     }
 
     /**
@@ -61,6 +91,15 @@ class ProdutosController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $produto = Produto::findOrFail($id);
+
+        // apaga a imagem antiga se existir
+        if ($produto->imagem && \Storage::disk('public')->exists($produto->imagem)) {
+            \Storage::disk('public')->delete($produto->imagem);
+        }   
+        
+        Produto::destroy($id);
+
+        return redirect()->route('produtos.index');
     }
 }
