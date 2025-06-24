@@ -36,7 +36,7 @@
                         </form>
                         
                         <x-link-button href="{{ route('produtos.edit', $produto->id) }}">Editar Produto</x-link-button>
-
+                        <x-link-button href="{{ route('carrinho.salvar', $produto->id) }}">Adicionar ao carrinho</x-link-button>
                     </div>
                 @endforeach
 

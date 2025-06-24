@@ -1,10 +1,10 @@
 <?php
 
+use App\Http\Controllers\CarrinhosController;
 use App\Http\Controllers\ProdutosController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Produto;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AutenticaController;
 use App\Http\Controllers\FuncionariosController;
 use App\Http\Controllers\KeepinhoController;
 
@@ -58,6 +58,14 @@ Route::prefix('/empresa') ->group(function(){
 
 
 Route::resource('produtos', ProdutosController::class);
+
+//CARRINHO
+Route::prefix('/carrinho')->group(function(){
+    Route::get('/', [CarrinhosController::class, 'index'])->name('carrinho');
+    Route::get('/adicionar/{produto}', [CarrinhosController::class, 'salvar'])->name('carrinho.salvar');
+    Route::get('/deletar', [CarrinhosController::class, 'deletar'])->name('carrinho.deletar');
+});
+
 
 
 require __DIR__.'/auth.php';
