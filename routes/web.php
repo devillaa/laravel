@@ -63,7 +63,7 @@ Route::resource('produtos', ProdutosController::class);
 Route::prefix('/carrinho')->group(function(){
     Route::get('/', [CarrinhosController::class, 'index'])->name('carrinho');
     Route::get('/adicionar/{produto}', [CarrinhosController::class, 'salvar'])->name('carrinho.salvar');
-    Route::get('/deletar', [CarrinhosController::class, 'deletar'])->name('carrinho.deletar');
+    Route::get('/deletar/{produto}', [CarrinhosController::class, 'deletar'])->name('carrinho.deletar');
 });
 
 
