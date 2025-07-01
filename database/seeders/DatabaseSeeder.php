@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
     
         $this->call([
             NotaSeeder::class,
+            UsuarioSeeder::class,
         ]);
     
     }

@@ -43,7 +43,7 @@ class ProdutosController extends Controller
         }
 
         Produto::create($dados);
-        return redirect()->route('produtos.index');
+        return redirect()->route('categorias.index');
     }
 
     /**

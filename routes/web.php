@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CarrinhosController;
+use App\Http\Controllers\CategoriasController;
 use App\Http\Controllers\ProdutosController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Produto;
@@ -66,6 +67,6 @@ Route::prefix('/carrinho')->group(function(){
     Route::get('/deletar/{produto}', [CarrinhosController::class, 'deletar'])->name('carrinho.deletar');
 });
 
-
+Route::resource('categorias', CategoriasController::class);
 
 require __DIR__.'/auth.php';
