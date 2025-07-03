@@ -30,14 +30,12 @@ class CarrinhosController extends Controller
         return redirect()->route('produtos.index');
     }
 
-    public function deletar(Request $request, Produto $produto){
+    public function deletar(Request $request, $id)
+    {
         $carrinho = session()->get('carrinho', []);
-        $id = $produto->id;
-
+    
         if (isset($carrinho[$id])) {
-        
             unset($carrinho[$id]);
-            
             session()->put('carrinho', $carrinho);
         }
     

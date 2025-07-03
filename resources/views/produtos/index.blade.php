@@ -21,6 +21,18 @@
                             
                             <p>Preço: R$ {{ number_format($produto->preco, 2, ',', '.') }}</p>
                             
+                            @if ($produto->categorias->count())
+                                <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                                    Categorias:
+                                    @foreach ($produto->categorias as $categoria)
+                                        <span class="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
+                                            {{ $categoria->nome }},
+                                        </span>
+                                    @endforeach
+                                </p>
+                            @endif
+
+
                             <p>{{ $produto->descricao }}</p>
                             
                             @if ($produto->imagem)

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Categoria;
 use App\Models\Produto;
 use Illuminate\Http\Request;
 
@@ -21,7 +22,9 @@ class ProdutosController extends Controller
      */
     public function create()
     {
-        return view('produtos.create');
+        $categorias = Categoria::all();
+
+        return view('produtos.create', compact('categorias'));
     }
 
     /**
@@ -34,16 +37,18 @@ class ProdutosController extends Controller
             'preco' => 'required',
             'descricao' => 'required',
             'imagem' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'categoria_ids' => 'required|array',
+            'categoria_ids.*' => 'exists:categorias,id',
         ]);
-
-        if($request->hasFile('imagem')){
-            $imagem = $request->file('imagem');
-            $caminhoImagem = $imagem->store('produtos', 'public');
-            $dados['imagem'] = $caminhoImagem;
+    
+        if ($request->hasFile('imagem')) {
+            $dados['imagem'] = $request->file('imagem')->store('produtos', 'public');
         }
-
-        Produto::create($dados);
-        return redirect()->route('categorias.index');
+    
+        $produto = Produto::create($dados);
+        $produto->categorias()->sync($request->categoria_ids);
+    
+        return redirect()->route('produtos.index');
     }
 
     /**
@@ -59,7 +64,8 @@ class ProdutosController extends Controller
      */
     public function edit(Produto $produto)
     {
-        return view('produtos.edit', compact('produto'));
+        $categorias = Categoria::all();
+        return view('produtos.edit', compact('produto', 'categorias'));
     }
 
     /**
@@ -82,7 +88,8 @@ class ProdutosController extends Controller
         }
     
         $produto->update($dados);
-    
+        $produto->categorias()->sync($request->categoria_ids);
+
         return redirect()->route('produtos.index');
     }
 
@@ -91,6 +98,13 @@ class ProdutosController extends Controller
      */
     public function destroy(string $id)
     {
+        $carrinho = session()->get('carrinho', []);
+    
+        if (isset($carrinho[$id])) {
+            unset($carrinho[$id]);
+            session()->put('carrinho', $carrinho);
+        }
+    
         $produto = Produto::findOrFail($id);
 
         // apaga a imagem antiga se existir

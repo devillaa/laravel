@@ -20,6 +20,24 @@
                             <x-input-error :messages="$errors->get('name')" class="mt-2" />
                         </div>
 
+                        <!-- Categoria -->
+                        <div class="mb-4">
+                            <label for="categoria_ids" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                                Categorias:
+                            </label>
+                            
+                            <select name="categoria_ids[]" id="categoria_ids" multiple
+                                class="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 rounded-lg shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-2 h-40">
+                                @foreach($categorias as $categoria)
+                                    <option value="{{ $categoria->id }}">{{ $categoria->nome }}</option>
+                                @endforeach
+                            </select>
+
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                                Segure Ctrl (ou Cmd no Mac) para selecionar várias categorias
+                            </p>
+                        </div>
+
                         <!-- Preço -->
                         <div>
                             <x-input-label for="preco" :value="__('Preço')" />
